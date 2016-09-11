@@ -11,6 +11,7 @@ import UIKit
 class DetailViewController: UIViewController,NSURLSessionDelegate,NSURLSessionDownloadDelegate {
 
     @IBOutlet weak var detailDescriptionLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
     
     var thisHotelAddress:AnyObject?
 
@@ -36,20 +37,23 @@ class DetailViewController: UIViewController,NSURLSessionDelegate,NSURLSessionDo
         // Do any additional setup after loading the view, typically from a nib.
         self.configureView()
         
-        let url = (thisHotelAddress as! [String:AnyObject])["address"]
+        //let url = (thisHotelAddress as! [String:AnyObject])["address"]
+        let url = NSURL(string: "http://www.apple.com/euro/ios/ios8/a/generic/images/og.png")
+        let address = (thisHotelAddress as! [String:AnyObject])["address"]
         
-        print("URL \(url)")
+        print("adress:\(address)")
         
-//        if let url = url //如果有圖片網址，向伺服器請求圖片資料
-//        {
-//            let sessionWithConfigure = NSURLSessionConfiguration.defaultSessionConfiguration()
-//            
-//            let session = NSURLSession(configuration: sessionWithConfigure, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
-//            
-//            let dataTask = session.downloadTaskWithURL(NSURL(string: url as! String)!)
-//            
-//            dataTask.resume()
-//        }
+        if url != nil //如果有網址，向伺服器請求資料
+        {
+            let sessionWithConfigure = NSURLSessionConfiguration.defaultSessionConfiguration()
+            
+            let session = NSURLSession(configuration: sessionWithConfigure, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+            
+            let dataTask = session.downloadTaskWithURL(NSURL(string: "http://www.apple.com/euro/ios/ios8/a/generic/images/og.png")!)
+            
+            dataTask.resume()
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,11 +66,9 @@ class DetailViewController: UIViewController,NSURLSessionDelegate,NSURLSessionDo
         guard let addressData = NSData(contentsOfURL: location) else {
             return
         }
-        
-        print("hello \(addressData)")
-        
+        imageView.image = UIImage(data: addressData)
     }
-
+    
 
 }
 
